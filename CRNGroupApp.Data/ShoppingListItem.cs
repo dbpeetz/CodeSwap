@@ -23,6 +23,8 @@ namespace CRNGroupApp.Data
         [MaxLength(25)]
         public string Note { get; set; }
 
+        //public var Photo { get; set; }
+
         [Display(Name = "Purchased")]
         public bool IsChecked { get; set; }
 

@@ -53,6 +53,19 @@ namespace CRNGroupApp.Controllers
             return View(shopinglistitems.ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult Index(string searchString)
+        {
+            var result = from m in db.ShoppingListItems
+                         select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                result = result.Where(s => s.Content.Contains(searchString));
+            }
+
+            return View(result);
+        }
+
         // GET: ShoppingListItem/Details/5
         public ActionResult Details(int? id)
         {
