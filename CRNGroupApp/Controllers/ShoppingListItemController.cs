@@ -6,6 +6,7 @@ using CRNGroupApp.Models;
 using CRNGroupApp.Data;
 using System;
 using PagedList;
+using System.Web;
 
 namespace CRNGroupApp.Controllers
 {
@@ -53,18 +54,6 @@ namespace CRNGroupApp.Controllers
             return View(shopinglistitems.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Index(string searchString)
-        {
-            var result = from m in db.ShoppingListItems
-                         select m;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                result = result.Where(s => s.Content.Contains(searchString));
-            }
-
-            return View(result);
-        }
 
         // GET: ShoppingListItem/Details/5
         public ActionResult Details(int? id)
@@ -92,7 +81,7 @@ namespace CRNGroupApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ShoppingListItemId,ShoppingListId,Content,Priority,Note,IsChecked,CreatedUtc,ModifiedUtc")] ShoppingListItem shoppingListItem)
+        public ActionResult Create([Bind(Include = "ShoppingListItemId,ShoppingListId,Content,Priority,Note,Photo,IsChecked,CreatedUtc,ModifiedUtc")] ShoppingListItem shoppingListItem)
         {
             if (ModelState.IsValid)
             {
@@ -103,6 +92,8 @@ namespace CRNGroupApp.Controllers
 
             return View(shoppingListItem);
         }
+
+
 
         // GET: ShoppingListItem/Edit/5
         public ActionResult Edit(int? id)

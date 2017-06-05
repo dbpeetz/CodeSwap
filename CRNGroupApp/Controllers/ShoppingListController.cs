@@ -96,7 +96,7 @@ namespace CRNGroupApp.Controllers
         //adding ViewItem to ShoppingListController
 
         // GET: ViewItem/View
-        public ActionResult ViewItem(int? id)
+        public ActionResult ViewItem(string searchString, int? id)
         {
 
             if (id == null)
@@ -108,6 +108,11 @@ namespace CRNGroupApp.Controllers
             ViewBag.ShoppingListId = id;
             ViewBag.ListTitle = db.ShoppingLists.Find(id).Name;
             ViewBag.ShoppingListColor = db.ShoppingLists.Find(id).Color;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                return View(db.ShoppingListItems.Where(s => s.Content.Contains(searchString)));
+            }
+
             return View(db.ShoppingListItems.Where(s => s.ShoppingListId == id));
 
         }

@@ -42,5 +42,8 @@ namespace CRNGroupApp.Services
                 return query.ToArray();
             }
         }
+
+        
+        }
     }
-}
+
