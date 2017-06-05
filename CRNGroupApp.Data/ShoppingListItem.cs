@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 
 namespace CRNGroupApp.Data
 {
@@ -39,5 +41,7 @@ namespace CRNGroupApp.Data
         }
 
         public virtual ShoppingList ShoppingList { get; set; }
+
+
     }
 }
