@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRNGroupApp.Data
 {
-    class File
+    public class File
     {
         public int FileId { get; set; }
         [StringLength(255)]
@@ -17,6 +17,7 @@ namespace CRNGroupApp.Data
         public byte[] Content { get; set; }
         public FileType FileType { get; set; }
         public int ShoppingListId { get; set; }
-        public virtual ShoppingListItem ListItem { get; set; }
+        public virtual ShoppingList ShoppingList { get; set; }
+        public virtual ShoppingListItem ShoppingListItem { get; set; }
     }
 }

@@ -8,6 +8,8 @@ using CRNGroupApp.Services;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using System.Xml.Linq;
+using System.Web;
+using System.Collections.Generic;
 
 namespace CRNGroupApp.Controllers
 {
@@ -147,10 +149,24 @@ namespace CRNGroupApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateItem([Bind(Include = "ShoppingListItemId,ShoppingListId," +
                                                        "Content,Priority,Note,IsChecked,CreatedUtc,ModifiedUtc")]
-                                                        ShoppingListItem shoppingListItem, int id)
+                                                        ShoppingListItem shoppingListItem, int id, HttpPostedFileBase upload)
         {   //added parameter int id to "create".
             if (ModelState.IsValid)
             {   //add shoppinglistitems to a particular list prior to "add"
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    var avatar = new File
+                    {
+                        FileName = System.IO.Path.GetFileName(upload.FileName),
+                        FileType = FileType.Avatar,
+                        ContentType = upload.ContentType
+                    };
+                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
+                    {
+                        avatar.Content = reader.ReadBytes(upload.ContentLength);
+                    }
+                    shoppingListItem.Files = new List<File> {avatar};
+                }
                 shoppingListItem.ShoppingListId = id;
                 db.ShoppingListItems.Add(shoppingListItem);
                 db.SaveChanges();

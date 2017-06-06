@@ -8,6 +8,54 @@ namespace CRNGroupApp.Data.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.File",
+                c => new
+                    {
+                        FileId = c.Int(nullable: false, identity: true),
+                        FileName = c.String(maxLength: 255),
+                        ContentType = c.String(maxLength: 100),
+                        Content = c.Binary(),
+                        FileType = c.Int(nullable: false),
+                        ShoppingListId = c.Int(nullable: false),
+                        ListItem_ShoppingListItemId = c.Int(),
+                    })
+                .PrimaryKey(t => t.FileId)
+                .ForeignKey("dbo.ShoppingList", t => t.ShoppingListId, cascadeDelete: true)
+                .ForeignKey("dbo.ShoppingListItem", t => t.ListItem_ShoppingListItemId)
+                .Index(t => t.ShoppingListId)
+                .Index(t => t.ListItem_ShoppingListItemId);
+            
+            CreateTable(
+                "dbo.ShoppingList",
+                c => new
+                    {
+                        ShoppingListId = c.Int(nullable: false, identity: true),
+                        UserId = c.Guid(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 25),
+                        Color = c.String(),
+                        CreatedUtc = c.DateTimeOffset(nullable: false, precision: 7),
+                        ModifiedUtc = c.DateTimeOffset(precision: 7),
+                    })
+                .PrimaryKey(t => t.ShoppingListId);
+            
+            CreateTable(
+                "dbo.ShoppingListItem",
+                c => new
+                    {
+                        ShoppingListItemId = c.Int(nullable: false, identity: true),
+                        ShoppingListId = c.Int(nullable: false),
+                        Content = c.String(nullable: false, maxLength: 25),
+                        Priority = c.Int(nullable: false),
+                        Note = c.String(maxLength: 25),
+                        IsChecked = c.Boolean(nullable: false),
+                        CreatedUtc = c.DateTimeOffset(nullable: false, precision: 7),
+                        ModifiedUtc = c.DateTimeOffset(precision: 7),
+                    })
+                .PrimaryKey(t => t.ShoppingListItemId)
+                .ForeignKey("dbo.ShoppingList", t => t.ShoppingListId, cascadeDelete: true)
+                .Index(t => t.ShoppingListId);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -29,36 +77,6 @@ namespace CRNGroupApp.Data.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
-            
-            CreateTable(
-                "dbo.ShoppingListItem",
-                c => new
-                    {
-                        ShoppingListItemId = c.Int(nullable: false, identity: true),
-                        ShoppingListId = c.Int(nullable: false),
-                        Content = c.String(nullable: false, maxLength: 25),
-                        Priority = c.Int(nullable: false),
-                        Note = c.String(maxLength: 25),
-                        IsChecked = c.Boolean(nullable: false),
-                        CreatedUtc = c.DateTimeOffset(nullable: false, precision: 7),
-                        ModifiedUtc = c.DateTimeOffset(precision: 7),
-                    })
-                .PrimaryKey(t => t.ShoppingListItemId)
-                .ForeignKey("dbo.ShoppingList", t => t.ShoppingListId, cascadeDelete: true)
-                .Index(t => t.ShoppingListId);
-            
-            CreateTable(
-                "dbo.ShoppingList",
-                c => new
-                    {
-                        ShoppingListId = c.Int(nullable: false, identity: true),
-                        UserId = c.Guid(nullable: false),
-                        Name = c.String(nullable: false, maxLength: 25),
-                        Color = c.String(),
-                        CreatedUtc = c.DateTimeOffset(nullable: false, precision: 7),
-                        ModifiedUtc = c.DateTimeOffset(precision: 7),
-                    })
-                .PrimaryKey(t => t.ShoppingListId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -114,22 +132,27 @@ namespace CRNGroupApp.Data.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.ShoppingListItem", "ShoppingListId", "dbo.ShoppingList");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.ShoppingListItem", "ShoppingListId", "dbo.ShoppingList");
+            DropForeignKey("dbo.File", "ListItem_ShoppingListItemId", "dbo.ShoppingListItem");
+            DropForeignKey("dbo.File", "ShoppingListId", "dbo.ShoppingList");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.ShoppingListItem", new[] { "ShoppingListId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.ShoppingListItem", new[] { "ShoppingListId" });
+            DropIndex("dbo.File", new[] { "ListItem_ShoppingListItemId" });
+            DropIndex("dbo.File", new[] { "ShoppingListId" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.ShoppingList");
-            DropTable("dbo.ShoppingListItem");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.ShoppingListItem");
+            DropTable("dbo.ShoppingList");
+            DropTable("dbo.File");
         }
     }
 }

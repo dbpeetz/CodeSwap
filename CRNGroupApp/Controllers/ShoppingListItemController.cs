@@ -7,6 +7,7 @@ using CRNGroupApp.Data;
 using System;
 using PagedList;
 using System.Web;
+using System.Collections.Generic;
 
 namespace CRNGroupApp.Controllers
 {
@@ -81,24 +82,10 @@ namespace CRNGroupApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ShoppingListItemId,ShoppingListId,Content,Priority,Note,Photo,IsChecked,CreatedUtc,ModifiedUtc")] ShoppingListItem shoppingListItem, HttpPostedFileBase upload)
+        public ActionResult Create([Bind(Include = "ShoppingListItemId,ShoppingListId,Content,Priority,Note,IsChecked,CreatedUtc,ModifiedUtc")] ShoppingListItem shoppingListItem)
         {
             if (ModelState.IsValid)
             {
-                if (upload != null && upload.ContentLength > 0)
-                {
-                    var img = new ShoppingListItem
-                    {
-                        Photo = System.IO.Path.GetFileName(upload.Photo),
-                        FileType = FileType.Image,
-                        ContentType = upload.ContentType
-                    };
-                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
-                    {
-                        img.Content = reader.ReadBytes(upload.ContentLength); 
-                    }
-                    shoppingListItem.Files = new List<File> { img };
-                }
                 db.ShoppingListItems.Add(shoppingListItem);
                 db.SaveChanges();
                 return RedirectToAction("Index");

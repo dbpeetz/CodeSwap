@@ -61,12 +61,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.Note)
         </td>
-        <td>
-          @using (Html.BeginForm("Create", "Content", FormMethod.Post, new { enctype = "multipart/form-data" }))
-          {
-            <input type="file" name="ImageData" id="ImageData" onchange="fileCheck(this);" />
-          }
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.IsChecked)
         </td>

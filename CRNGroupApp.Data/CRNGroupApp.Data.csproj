@@ -63,13 +63,13 @@
     <Compile Include="File.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="IdentityModels.cs" />
-    <Compile Include="Migrations\201706011657419_InitialCreate.cs" />
-    <Compile Include="Migrations\201706011657419_InitialCreate.Designer.cs">
-      <DependentUpon>201706011657419_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201706061609312_InitialCreate.cs" />
+    <Compile Include="Migrations\201706061609312_InitialCreate.Designer.cs">
+      <DependentUpon>201706061609312_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706051623093_InitialMigration.cs" />
-    <Compile Include="Migrations\201706051623093_InitialMigration.Designer.cs">
-      <DependentUpon>201706051623093_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201706061627258_fixedError.cs" />
+    <Compile Include="Migrations\201706061627258_fixedError.Designer.cs">
+      <DependentUpon>201706061627258_fixedError.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Priority.cs" />
@@ -85,11 +85,11 @@
     <Content Include="Content\PagedList.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201706011657419_InitialCreate.resx">
-      <DependentUpon>201706011657419_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706061609312_InitialCreate.resx">
+      <DependentUpon>201706061609312_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706051623093_InitialMigration.resx">
-      <DependentUpon>201706051623093_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706061627258_fixedError.resx">
+      <DependentUpon>201706061627258_fixedError.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

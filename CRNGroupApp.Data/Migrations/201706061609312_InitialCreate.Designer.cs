@@ -13,7 +13,7 @@ namespace CRNGroupApp.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201706011657419_InitialCreate"; }
+            get { return "201706061609312_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

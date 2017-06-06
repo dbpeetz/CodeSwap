@@ -25,7 +25,6 @@ namespace CRNGroupApp.Data
         [MaxLength(25)]
         public string Note { get; set; }
 
-        public byte[] Photo { get; set; }
 
         [Display(Name = "Purchased")]
         public bool IsChecked { get; set; }
@@ -41,6 +40,9 @@ namespace CRNGroupApp.Data
         }
 
         public virtual ShoppingList ShoppingList { get; set; }
+
+        public virtual ICollection<File> Files { get; set; }
+
 
 
     }
