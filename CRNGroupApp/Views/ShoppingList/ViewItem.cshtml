@@ -40,6 +40,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Note)
         </th>
+        <th>
+            Photo
+        </th>
         @*<th>
                 @Html.DisplayNameFor(model => model.CreatedUtc)
             </th>*@
@@ -68,6 +71,14 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @if (item.Files.Any(f => f.FileType == CRNGroupApp.Data.FileType.Avatar))
+                {
+                    <dd>
+                        <img src="~File?id=@item.Files.First(f => f.FileType == CRNGroupApp.Data.FileType.Avatar).FileId" alt="avatar" />
+                    </dd>
+                }
             </td>
             <td>
               @* @Html.DisplayFor(modelItem => item.)*@

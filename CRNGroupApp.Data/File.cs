@@ -16,8 +16,7 @@ namespace CRNGroupApp.Data
         public string ContentType { get; set; }
         public byte[] Content { get; set; }
         public FileType FileType { get; set; }
-        public int ShoppingListId { get; set; }
-        public virtual ShoppingList ShoppingList { get; set; }
+        public int ShoppingListItemId { get; set; }
         public virtual ShoppingListItem ShoppingListItem { get; set; }
     }
 }
