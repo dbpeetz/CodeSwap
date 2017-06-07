@@ -6,7 +6,7 @@ I added a search bar to the List Items, and added the ability to upload photos t
 
 ### Screenshot
 
-![ScreenShot](https://raw.github.com/dbpeetz/CodeSwap/image/screenshot/ListPage.png)
+![ScreenShot](https://raw.github.com/dbpeetz/CodeSwap/image/screenshots/ListPage.png)
 
 ## Built With
 
