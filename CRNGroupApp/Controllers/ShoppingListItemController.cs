@@ -6,6 +6,8 @@ using CRNGroupApp.Models;
 using CRNGroupApp.Data;
 using System;
 using PagedList;
+using System.Web;
+using System.Collections.Generic;
 
 namespace CRNGroupApp.Controllers
 {
@@ -53,6 +55,7 @@ namespace CRNGroupApp.Controllers
             return View(shopinglistitems.ToPagedList(pageNumber, pageSize));
         }
 
+
         // GET: ShoppingListItem/Details/5
         public ActionResult Details(int? id)
         {
@@ -90,6 +93,8 @@ namespace CRNGroupApp.Controllers
 
             return View(shoppingListItem);
         }
+
+
 
         // GET: ShoppingListItem/Edit/5
         public ActionResult Edit(int? id)

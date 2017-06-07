@@ -8,6 +8,8 @@ using CRNGroupApp.Services;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using System.Xml.Linq;
+using System.Web;
+using System.Collections.Generic;
 
 namespace CRNGroupApp.Controllers
 {
@@ -23,15 +25,15 @@ namespace CRNGroupApp.Controllers
             var service = CreateListService();
             var model = service.GetLists();
             //var ctxdb = db.ShoppingLists
-           //             .Where(e => e.UserId == Guid.Parse(User.Identity.GetUserId()));
+            //             .Where(e => e.UserId == Guid.Parse(User.Identity.GetUserId()));
 
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             if (searchString != null)
             {
-                
+
                 var shopinglistso = from s in db.ShoppingLists
                                     select s;
                 //model = shopinglistso.Where(s => s.Name.Contains(searchString));
@@ -46,7 +48,7 @@ namespace CRNGroupApp.Controllers
             ViewBag.currentFilter = searchString;
 
             var shopinglists = from s in db.ShoppingLists
-                           select s;
+                               select s;
             if (!String.IsNullOrEmpty(searchString))
             {
                 shopinglists = shopinglists.Where(s => s.Name.Contains(searchString));
@@ -56,23 +58,23 @@ namespace CRNGroupApp.Controllers
                 case "name_desc":
                     shopinglists = shopinglists.OrderByDescending(s => s.Name);
                     break;
-               
-                    
+
+
                 default:
                     shopinglists = shopinglists.OrderBy(s => s.Name);
                     break;
             }
             //var shoppingListItems = db.ShoppingListItems.Include(s => s.ShoppingList);
-            
+
 
             return View(model.OrderBy(s => s.Name).ToPagedList(pageNumber, pageSize));
-            }
+        }
 
-           /* int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            //var shoppingListItems = db.ShoppingListItems.Include(s => s.ShoppingList);
-            return View(shopinglists.ToPagedList(pageNumber, pageSize));
-        }*/
+        /* int pageSize = 3;
+         int pageNumber = (page ?? 1);
+         //var shoppingListItems = db.ShoppingListItems.Include(s => s.ShoppingList);
+         return View(shopinglists.ToPagedList(pageNumber, pageSize));
+     }*/
 
         // GET: ShoppingListModel/Details/5
         public ActionResult Details(int? id)
@@ -83,6 +85,7 @@ namespace CRNGroupApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            ShoppingListItem shoppingListItem = db.ShoppingListItems.Include(s => s.Files).SingleOrDefault(s => s.ShoppingListItemId == id);
             Data.ShoppingList shoppingListModel = db.ShoppingLists.Find(id);
             if (shoppingListModel == null)
             {
@@ -96,7 +99,7 @@ namespace CRNGroupApp.Controllers
         //adding ViewItem to ShoppingListController
 
         // GET: ViewItem/View
-        public ActionResult ViewItem(int? id)
+        public ActionResult ViewItem(int? id, string searchString)
         {
 
             if (id == null)
@@ -104,10 +107,14 @@ namespace CRNGroupApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-
             ViewBag.ShoppingListId = id;
             ViewBag.ListTitle = db.ShoppingLists.Find(id).Name;
             ViewBag.ShoppingListColor = db.ShoppingLists.Find(id).Color;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                return View(db.ShoppingListItems.Where(s => s.Content.Contains(searchString)));
+            }
+
             return View(db.ShoppingListItems.Where(s => s.ShoppingListId == id));
 
         }
@@ -142,14 +149,30 @@ namespace CRNGroupApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateItem([Bind(Include = "ShoppingListItemId,ShoppingListId," +
                                                        "Content,Priority,Note,IsChecked,CreatedUtc,ModifiedUtc")]
-                                                        ShoppingListItem shoppingListItem, int id)
+                                                        ShoppingListItem shoppingListItem, int id, HttpPostedFileBase upload)
         {   //added parameter int id to "create".
             if (ModelState.IsValid)
-            {   //add shoppinglistitems to a particular list prior to "add"
+            {
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    var avatar = new File
+                    {
+                        FileName = System.IO.Path.GetFileName(upload.FileName),
+                        FileType = FileType.Avatar,
+                        ContentType = upload.ContentType
+                    };
+                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
+                    {
+                        avatar.Content = reader.ReadBytes(upload.ContentLength);
+                    }
+                    shoppingListItem.Files = new List<File> { avatar };
+                }
+
+                //add shoppinglistitems to a particular list prior to "add"
                 shoppingListItem.ShoppingListId = id;
                 db.ShoppingListItems.Add(shoppingListItem);
                 db.SaveChanges();
-                return RedirectToAction("ViewItem", new {id});
+                return RedirectToAction("ViewItem", new { id });
             }
             //trying to return to view of shopping list items on a particular list
             return View();
@@ -190,6 +213,7 @@ namespace CRNGroupApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            ShoppingListItem shoppingListItem = db.ShoppingListItems.Include(s => s.Files).SingleOrDefault(s => s.ShoppingListId == id);
             Data.ShoppingList shoppingListModel = db.ShoppingLists.Find(id);
             if (shoppingListModel == null)
             {

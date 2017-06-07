@@ -30,6 +30,7 @@ namespace CRNGroupApp.Data
         }
 
         public virtual ICollection<ShoppingListItem> ShoppingListItems { get; set; }
+        public virtual ICollection<File> Files { get; set; }
     }
 }
 

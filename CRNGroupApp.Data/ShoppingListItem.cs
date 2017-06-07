@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 
 namespace CRNGroupApp.Data
 {
@@ -23,6 +25,7 @@ namespace CRNGroupApp.Data
         [MaxLength(25)]
         public string Note { get; set; }
 
+
         [Display(Name = "Purchased")]
         public bool IsChecked { get; set; }
 
@@ -37,5 +40,10 @@ namespace CRNGroupApp.Data
         }
 
         public virtual ShoppingList ShoppingList { get; set; }
+
+        public virtual ICollection<File> Files { get; set; }
+
+
+
     }
 }
